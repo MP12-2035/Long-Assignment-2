@@ -2,55 +2,90 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int key;        
-    string content;
+struct Node{
     int height;
-    Node *left, *right;
-    Node(int k, string c) : key(k), content(c), height(1), left(nullptr), right(nullptr) {}
-};
-
-class AVL {
-private:
-    Node* root = nullptr;
-    int counter = 0;
-
-    int height(Node* n);
-    int balanceFactor(Node* n);
-
-    Node* rightRotate(Node* y);
-    Node* leftRotate(Node* x);
-
-public:
-    void addPost(const string &content);
-    vector<string> getRecentPosts(int N); 
-
-    Node* insert(Node* node, int key, const string &content);
-    Node* remove(Node* node, int key);
-    Node* update(Node* node, int key, const string &content);
-
-    void reverseInorder(Node* node, vector<string> &posts, int &N);
-};
-
-//add method to generate postID which will act as keys
-//also add delete later 
-//update too, that will be like both deleting and inserting
-
-AVL::height(Node* n){
-    return n->height;
-}
-
-AVL::balanceFactor(Node* n){
-    int lh= n->left->height;
-    int rh= n->right->height;
-    return (lh - rh);
-}
-
-AVL::rightRotate(Node* y){
+    int ID;
+    string content;
+    int bf;
+    Node *left;
+    Node *right;
+        
+    Node (int ID, string content) : 
+    ID(ID), content(""), left(nullptr), right(nullptr), height(0), bf(0) {}
+    
+    };
+    
+class AVL{
+    private:
+    
+    Node* root;
+    
+    AVL(): root(nullptr) {}
+    ~AVL(){}
+    
+    int height(Node* n) {
+        if (n==nullptr) return -1;
+        else return n->height;
+    }
+        
+    int balance_factor(Node* n) {
+        if (n==nullptr) return 0;
+        else return n->bf;
+    }
+    
+    string disp_content(Node* n) {
+        if (n==nullptr) return "Post doesn't exist";
+        else return n->content;
+    }
+    
+    Node* leftR(Node* x){
+        Node* y=x->right;
+        Node* T2=y->left;
+        
+        y->left=x;
+        x->right=T2;
+        
+        return y;
+    }
+    
+    Node* rightR(Node* x){
+        Node* y=x->left;
+        Node* T2=y->right;
+        
+        y->right=x;
+        x->left=T2;
+        
+        return y;
+    }
+    
+    public:
+    Node* find(int ID){
+        Node* cur=root;
+        
+        while(cur->left || cur->right){
+            if (cur->ID==ID) break;
+            else if (cur->ID<ID) cur=cur->right;
+            else cur=cur->left;
+        }
+        return cur;
+    }
+    void insert(int ID, string content){
+        Node avlnode= new Node(ID, content);
+        
+        Node* place= find(ID);
+        
+        if (place->ID<ID) place->left=avlnode;
+        else place->right=avlnode;
+        
+        place->height++;
+        
+        place->bf=place->left->height-place->right->height;
+        
+        if (abs(place->bf)>1) {
+            //rebalancing needed
+            if 
+        }
+        
+    }
     
 }
-
-AVL:: leftRotate(Node* x){
-    
-}
-
